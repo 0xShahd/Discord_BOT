@@ -14,7 +14,7 @@ namespace Commands_Library
         {
             StringBuilder strb = new StringBuilder();
             if (value != null)
-            {
+            {              
                 foreach (char letter in value)
                 {
                     int Counter = 0;
@@ -23,12 +23,12 @@ namespace Commands_Library
                     strb = strb.Append(Convert.ToString(i, 2));
                     Counter++;
                 }
+                await context.RespondAsync($"`{ strb }`");
             }
             else
             {
                 await context.RespondAsync("You forgot to enter the value");
             }
-            await context.RespondAsync($"`{ strb }`");
         }
 
         [Command("hex")]
@@ -36,15 +36,22 @@ namespace Commands_Library
         public async Task Hex(CommandContext context, [RemainingText] string value)
         {
             StringBuilder strb = new StringBuilder();
-            foreach (char letter in value)
+            if (value != null)
             {
-                int Counter = 0;
-                if (Counter % 2 == 0) strb.Append(" ");
-                int i = Convert.ToInt32(letter);
-                strb = strb.Append($"{i:X}");
-                Counter++;
+                foreach (char letter in value)
+                {
+                    int Counter = 0;
+                    if (Counter % 2 == 0) strb.Append(" ");
+                    int i = Convert.ToInt32(letter);
+                    strb = strb.Append($"{i:X}");
+                    Counter++;
+                }
+                await context.RespondAsync($"`{ strb }`");
             }
-            await context.RespondAsync($"{ strb }");
+            else
+            {
+                await context.RespondAsync("You forgot to enter the value");
+            }    
         }
 
         [Command("octal")]
@@ -52,12 +59,19 @@ namespace Commands_Library
         public async Task Octal(CommandContext context, [RemainingText] string value)
         {
             StringBuilder strb = new StringBuilder();
-            foreach (char letter in value)
+            if (value != null)
             {
-                int i = Convert.ToInt32(letter);
-                strb = strb.Append(Convert.ToString(i, 8));
+                foreach (char letter in value)
+                {
+                    int i = Convert.ToInt32(letter);
+                    strb = strb.Append(Convert.ToString(i, 8)); 
+                }
+                await context.RespondAsync($"`{ strb }`");
             }
-            await context.RespondAsync($"{ strb }");
+            else
+            {
+                await context.RespondAsync("You forgot to enter the value");
+            } 
         }
     }
 }
