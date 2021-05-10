@@ -35,6 +35,7 @@ namespace BOT
                Timeout = TimeSpan.FromSeconds(50) 
             });
 
+            Commands.SetHelpFormatter<HelpFormatter>();
             Commands.RegisterCommands<ConvertCommands>();
             Commands.RegisterCommands<FunCommands>();
 
