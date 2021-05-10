@@ -5,11 +5,15 @@ using System;
 using System.Threading.Tasks;
 using System.IO;
 using System.Text;
+using DSharpPlus.Interactivity;
+using DSharpPlus.Interactivity.Extensions;
 
 namespace Commands_Library
 {
     public class FunCommands : BaseCommandModule
     {
+        public InteractivityExtension interactivity { get; private set; }
+
         [Command("ping")]
         [Description("ping pong")]
         public async Task Greet(CommandContext context)
@@ -29,8 +33,29 @@ namespace Commands_Library
             Random random = new Random();
             await context.RespondAsync($"{words[random.Next(0, words.Length)]}");
         }
-        [Command("reaction"), Aliases("react")]
-        public async Task Join(CommandContext context)
+        [Command("BMI")]
+        public async Task BMI(CommandContext context, float height, float weight)
+        {
+            var BMI = weight / (height * height);
+            if (BMI >= 25f)
+            {
+                await context.RespondAsync($"{BMI:F2} is **overwight**.");
+            }
+            else if (BMI < 25 && BMI > 18.5f)
+            {
+                await context.RespondAsync($"{BMI:F2} is **normal**.");
+            }
+            else if (BMI <= 18.5f)
+            {
+                await context.RespondAsync($"{BMI:F2} is **underweight**.");
+            }
+            else
+            {
+                await context.RespondAsync("Wrong values.");
+            }
+        }
+        [Command("role")]
+        public async Task GiveRole(CommandContext context)
         {
             var JoinEmbed = new DiscordEmbedBuilder
             {
@@ -38,25 +63,26 @@ namespace Commands_Library
                 Description = "Which of the following emoji represents your feeling.",
                 Title = "How do you feel?"
             };
-            var ReactionMessage = context.Channel.SendMessageAsync(embed: JoinEmbed);
-            var result = ReactionMessage.Result;
+            var message = context.Channel.SendMessageAsync(embed: JoinEmbed);
+            var result = message.Result;
 
             var heart = DiscordEmoji.FromName(context.Client, ":heart:");
-            var joy = DiscordEmoji.FromName(context.Client, ":joy:");
-            var cry = DiscordEmoji.FromName(context.Client, ":cry:");
-            var anger = DiscordEmoji.FromName(context.Client, ":anger:");
 
             await result.CreateReactionAsync(heart);
-            await result.CreateReactionAsync(joy);
-            await result.CreateReactionAsync(anger);
-            await result.CreateReactionAsync(cry);
+            var interactivity = context.Client.GetInteractivity();
 
-        }
+            var RoleResult = await interactivity.WaitForReactionAsync(x => x.Message.Author.Id == context.Member.Id && x.User == context.User);
+            if(RoleResult.Result.Emoji == heart)
+            {
+                await context.Member.GrantRoleAsync(context.Guild.GetRole(840608029703012392));
+            }
+            await result.DeleteAsync();
+        }      
         string[] ConvertText(string path)
         {
             string str = string.Empty;
             using (var filestream = File.OpenRead(path))
-            {
+            { 
                 using (var streamreader = new StreamReader(filestream, new UTF8Encoding(true)))
                 {
                     str = streamreader.ReadToEnd();
