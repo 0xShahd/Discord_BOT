@@ -21,12 +21,14 @@ namespace Commands_Library
             await context.RespondAsync($"pong :ping_pong:");
         }
         [Command("random"), Aliases("rnd")]
+        [Description("maybe later")]
         public async Task Random(CommandContext context, int min, int max)
         {
             Random random = new Random();
             await context.RespondAsync($"  {random.Next(min, max)}  :game_die:");
         }
         [Command("saysomething"), Aliases("ss")]
+        [Description("maybe later")]
         public async Task SaySomthing(CommandContext context)
         {
             string[] words = ConvertText(@"D:\Discord_BOT\Discord_BOT\BOT\Text.txt");
@@ -34,6 +36,7 @@ namespace Commands_Library
             await context.RespondAsync($"{words[random.Next(0, words.Length)]}");
         }
         [Command("BMI")]
+        [Description("maybe later")]
         public async Task BMI(CommandContext context, float height, float weight)
         {
             var BMI = weight / (height * height);
@@ -54,14 +57,16 @@ namespace Commands_Library
                 await context.RespondAsync("Wrong values.");
             }
         }
+
         [Command("role")]
+        [Description("maybe later")]
         public async Task GiveRole(CommandContext context)
         {
             var JoinEmbed = new DiscordEmbedBuilder
             {
                 Color = DiscordColor.Rose,
-                Description = "Which of the following emoji represents your feeling.",
-                Title = "How do you feel?"
+                Description = "",
+                Title = ""
             };
             var message = context.Channel.SendMessageAsync(embed: JoinEmbed);
             var result = message.Result;

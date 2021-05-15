@@ -8,6 +8,18 @@ namespace Commands_Library
 {
     public class ConvertCommands : BaseCommandModule
     {
+        [Command("ASCIIEncoding")]
+        [Description("maybe later")]
+        public async Task ASCIIEncoding(CommandContext context, [RemainingText] string value)
+        {
+            var ascii = new ASCIIEncoding();
+            Byte[] encodedBytes = ascii.GetBytes(value);
+            foreach (Byte b in encodedBytes)
+            {
+                await context.RespondAsync($"{ b }");
+            }
+        }
+
         [Command("binary")]
         [Description("Convert the txet to binary.")]
         public async Task ToBinary(CommandContext context, [RemainingText] string value)
